@@ -344,10 +344,23 @@ func NewManagerWithSpec(spec *specs.LinuxResources, pid int, group string, syste
 	if pid == 0 {
 		return nil, fmt.Errorf("a pid is required to create a new cgroup")
 	}
-	if group == "" && !systemd {
+	//if group == "" && !systemd {
+	//	group = filepath.Join("/apptainer", strconv.Itoa(pid))
+	//}
+	//
+	//if group == "" && systemd {
+	//	if os.Getuid() == 0 {
+	//		group = "system.slice:apptainer:" + strconv.Itoa(pid)
+	//	} else {
+	//		group = "user.slice:apptainer:" + strconv.Itoa(pid)
+	//	}
+	//}
+
+	if !systemd {
 		group = filepath.Join("/apptainer", strconv.Itoa(pid))
 	}
-	if group == "" && systemd {
+
+	if systemd {
 		if os.Getuid() == 0 {
 			group = "system.slice:apptainer:" + strconv.Itoa(pid)
 		} else {
